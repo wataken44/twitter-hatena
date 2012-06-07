@@ -77,9 +77,9 @@ def BuildPost(timeline):
         created_at = datetime.datetime.fromtimestamp(created_at_str)
 
         # filter tweet at yesterday
-        if yesterday.year != created_at.year or yesterday.month != created_at.day or yesterday.day != created_at.day:
+        if yesterday.year != created_at.year or yesterday.month != created_at.month or yesterday.day != created_at.day:
             continue
-        
+
         text = BuildText(elem)
         tweets.append(text)
 
@@ -93,7 +93,7 @@ def BuildText(tweet):
         for info in tweet['entities']['urls']:
             text = text.replace(
                 info['url'],
-                CreateLink(info['expanded_url'],info['url']))
+                CreateLink(info['url'],info['expanded_url']))
         for info in tweet['entities']['hashtags']:
             text = text.replace(
                 '#' + info['text'],
