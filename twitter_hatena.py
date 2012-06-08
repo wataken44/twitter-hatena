@@ -86,8 +86,8 @@ def BuildPost(timeline):
         text = BuildText(elem)
         tweets.append(text)
 
-    post = "<!--\\n-->  ".join(reversed(tweets))
-    post = "<ul class=\"twitter-log\">\n  " + post + "\n</ul>";
+    post = "<!--\\n-->".join(reversed(tweets))
+    #post = "<ul class=\"twitter-log\">\n  " + post + "\n</ul>";
 
     return post
 
@@ -109,7 +109,7 @@ def BuildText(tweet):
                 '@' + name,
                 CreateLink("//twitter.com/"+name,'@'+name))
 
-    text = '<li class="twitter-tweet"><span class="twitter-text">' + text + "</span>"
+    text = '<div class="twitter-tweet"><span class="twitter-text">' + text + "</span>"
 
     created_at_str = calendar.timegm(rfc822.parsedate(tweet['created_at']))
     created_at = datetime.datetime.fromtimestamp(created_at_str)
@@ -117,7 +117,7 @@ def BuildText(tweet):
     screen_name = tweet['user']['screen_name']
     id_str = tweet['id_str']
     
-    text += " " + CreateLink("//twitter.com/%s/status/%s"%(screen_name, id_str), created_at.strftime("%H:%M:%S"), "twitter-permalink") + "</li>"
+    text += " " + CreateLink("//twitter.com/%s/status/%s"%(screen_name, id_str), created_at.strftime("%H:%M:%S"), "twitter-permalink") + "</div>"
 
     return text
     
