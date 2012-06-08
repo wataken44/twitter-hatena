@@ -56,8 +56,11 @@ def GetTimeline(screen_name):
     return js
 
 
-def CreateLink(href, text):
-    return "<a href=\"%s\" rel=\"nofollow\">%s</a>" % (href, text)
+def CreateLink(href, text, klass=None):
+    if klass:
+        return "<a href=\"%s\" class=\"%s\" rel=\"nofollow\">%s</a>" % (href, klass, text)
+    else:
+        return "<a href=\"%s\" rel=\"nofollow\">%s</a>" % (href, text)
 
 def BuildPost(timeline):
     if not isinstance(timeline, list):
@@ -83,7 +86,9 @@ def BuildPost(timeline):
         text = BuildText(elem)
         tweets.append(text)
 
-    post = "\n".join(reversed(tweets))
+    post = "<!--\\n-->  ".join(reversed(tweets))
+    post = "<ul class=\"twitter-log\">\n  " + post + "\n</ul>";
+
     return post
 
 def BuildText(tweet):
@@ -104,13 +109,15 @@ def BuildText(tweet):
                 '@' + name,
                 CreateLink("//twitter.com/"+name,'@'+name))
 
+    text = '<li class="twitter-tweet"><span class="twitter-text">' + text + "</span>"
+
     created_at_str = calendar.timegm(rfc822.parsedate(tweet['created_at']))
     created_at = datetime.datetime.fromtimestamp(created_at_str)
 
     screen_name = tweet['user']['screen_name']
     id_str = tweet['id_str']
     
-    text += " " + CreateLink("//twitter.com/%s/status/%s"%(screen_name, id_str), created_at.strftime("%H:%M:%S"))
+    text += " " + CreateLink("//twitter.com/%s/status/%s"%(screen_name, id_str), created_at.strftime("%H:%M:%S"), "twitter-permalink") + "</li>"
 
     return text
     
