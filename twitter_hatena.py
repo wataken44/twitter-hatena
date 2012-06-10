@@ -9,8 +9,10 @@
 import calendar
 import codecs
 import datetime
+import getopt
 import json
 import mechanize
+import re
 import rfc822
 import sys
 import time
@@ -62,12 +64,10 @@ def CreateLink(href, text, klass=None):
     else:
         return "<a href=\"%s\" rel=\"nofollow\">%s</a>" % (href, text)
 
-def BuildPost(timeline):
+def BuildPost(timeline, day):
     if not isinstance(timeline, list):
         return None
 
-    yesterday = datetime.date.today() - datetime.timedelta(1)
-    
     tweets = []
 
     for elem in timeline:
@@ -80,7 +80,7 @@ def BuildPost(timeline):
         created_at = datetime.datetime.fromtimestamp(created_at_str)
 
         # filter tweet at yesterday
-        if yesterday.year != created_at.year or yesterday.month != created_at.month or yesterday.day != created_at.day:
+        if day.year != created_at.year or day.month != created_at.month or day.day != created_at.day:
             continue
 
         text = BuildText(elem)
@@ -125,6 +125,20 @@ def BuildText(tweet):
 def main():
     sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 
+    debug = False
+    day = datetime.date.today() - datetime.timedelta(1)
+
+    optlist, args = getopt.gnu_getopt(sys.argv[1:], "d")
+    for o, a in optlist:
+        if o == "-d":
+            debug = True
+
+    if len(args) == 1:
+        ds = args[0]
+        ptn = re.compile('(\d+)-(\d+)-(\d+)')
+        mr = ptn.match(ds)
+        day = datetime.date(int(mr.group(1)), int(mr.group(2)), int(mr.group(3)))
+
     credential = Pit.get('twitter-hatena',
                          {'require' : 
                           { 'hatena_username': '', 'hatena_password': '', 'hatena_domain': 'hatenablog.com', 'twitter_screenname': '' }})
@@ -136,13 +150,14 @@ def main():
 
         text = None
         if timeline is not None:
-            text = BuildPost(timeline)
-            yesterday = datetime.date.today() - datetime.timedelta(1)
-            title = yesterday.strftime("%Y/%b/%d") + u"のtweet"
+            text = BuildPost(timeline, day)
+            title = day.strftime("%Y/%b/%d") + u"のtweet"
 
         if text is not None and text != "":
-            #print text
-            hatena.Post(title, text)
+            if debug:
+                print text
+            else:
+                hatena.Post(title, text)
             return 
 
         time.sleep(3600 / 7 + 1)
