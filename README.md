@@ -33,5 +33,6 @@ Credentials are managed by Pit.
 
 Limitation
 -----------------
-* Twitter account must be public
-* Twitter-hatena
+* Twitter account must be public.
+* Pagenation is not supported.
+    * Twitter-Hatena gets the last 200 tweets.
