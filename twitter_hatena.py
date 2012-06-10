@@ -102,7 +102,7 @@ def BuildText(tweet):
         for info in tweet['entities']['hashtags']:
             text = text.replace(
                 '#' + info['text'],
-                CreateLink("//twitter.com/serch/%23"+info['text'],'#'+info['text']))
+                CreateLink("//twitter.com/search/%23"+info['text'],'#'+info['text']))
         for info in tweet['entities']['user_mentions']:
             name = info['screen_name']
             text = text.replace(
