@@ -7,7 +7,7 @@ System Requirements
 -----------------
 * Twitter account must be public
     * Twitter-Hatena gets timeline w/o authentication
-* [Pit](http://d.hatena.ne.jp/jYoshiori/20080623/1214219490 Japanese information about pit)
+* [Pit](http://d.hatena.ne.jp/jYoshiori/20080623/1214219490)
     * Pit for python is already registerd to Pypi
     * `sudo easy_install pit`
 * Python 3 is not supported
