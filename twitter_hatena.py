@@ -86,7 +86,7 @@ def BuildPost(timeline, day):
         text = BuildText(elem)
         tweets.append(text)
 
-    post = "<!--\\n-->".join(reversed(tweets))
+    post = "".join(reversed(tweets))
     #post = "<ul class=\"twitter-log\">\n  " + post + "\n</ul>";
 
     return post
