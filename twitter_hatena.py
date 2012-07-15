@@ -94,6 +94,8 @@ def BuildPost(timeline, day):
 def BuildText(tweet):
     text = tweet['text']
 
+    text = text.replace('\r','').replace('\n','<br />')
+
     if 'entities' in tweet:
         for info in tweet['entities']['urls']:
             text = text.replace(
